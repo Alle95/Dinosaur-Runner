@@ -1,0 +1,142 @@
+let noRow = 5;
+let noColumns = 15;
+let board, dinosaurId = 62, sunId = 1, id = 0;
+let cloudId = ["4","8","12"];
+let fence1Id = ["16","18","20","22","24","26","28","30"];
+let fence2Id = ["17","19","21","23","25","27","29"];
+let fenceId = ["16","18","20","22","24","26","28","30",
+"17","19","21","23","25","27","29"];
+let setChangeTreePosition, setTreePosition, setFenceMove, setTimer;
+let gameOver = true, jumping = false;
+
+function createBoard() {
+    board = [];
+    for (let i = 1; i <= noRow; ++i) {
+        let row = [];
+        for (let j = 1; j <= noColumns; ++j) {
+            row.push(0);
+            let cell = document.createElement('div');
+            cell.classList.add('box');
+            ++id;
+            cell.id = id;
+            document.getElementById('board').append(cell);
+        }
+        board.push(row);
+    }
+    document.getElementById(dinosaurId).className = 'dinosaur'; 
+    document.getElementById(sunId).className = 'sun';
+    for (let i = 0; i < cloudId.length; ++i) {
+        document.getElementById(cloudId[i]).className = 'cloud';
+    }
+    for(let i = 0; i < fence1Id.length; ++i) {
+        document.getElementById(fence1Id[i]).className = "fence1";
+    }
+    for(let i = 0; i < fence2Id.length; ++i) {
+        document.getElementById(fence2Id[i]).className = "fence2";
+    }
+    document.addEventListener("keyup", dinosaurDirectionMove);
+}
+
+/*const keyPress = document.addEventListener("keyup", (event) => {
+    if (event.key == ' ') {
+        if (gameOver) {
+            setTimer = setInterval(changeTime, 1000);
+            setFenceMove = setInterval(moveFence, 1000);
+            setTreePosition = setInterval(createTreePosition, 4000);
+            setChangeTreePosition = setInterval(changeTreePosition, 500);
+            gameOver = false;
+        }
+       if (!jumping) {
+        jumping = true;
+        dinosaurDirectionMove();
+       }
+    }
+});*/
+
+let treeCell;
+let treeList = [];
+
+function createTreePosition() {
+    treeCell = 75;
+    treeList.push(treeCell);
+    document.getElementById(treeCell).className = 'tree';
+}
+
+function changeTreePosition() {
+    for (let i = 0; i < treeList.length; ++i) {
+        let newTreePosition = parseInt(treeList[i]);
+        newTreePosition = newTreePosition - 1;
+        if (newTreePosition < 61) {
+            document.getElementById(treeList[i]).className = 'box';
+            newTreePosition = newTreePosition + 1;
+            let index = treeList.indexOf(newTreePosition.toString());
+            if(index >= 0) {
+                treeList.splice(index, 1);
+            }
+        } else {
+            document.getElementById(treeList[i]).className = 'box';
+            document.getElementById(newTreePosition.toString()).className = 'tree';
+            treeList[i] = newTreePosition.toString();
+        }
+        if(newTreePosition == position) {
+            scoreText.innerHTML = 'Your score is ' + time + ' points!';
+            document.getElementById("reload").style.display = "block";
+            clearInterval(setChangeTreePosition);
+            clearInterval(setTreePosition);
+            clearInterval(setFenceMove);
+            clearInterval(setTimer);
+        }
+    }
+}
+
+let noMoves = 15;
+let jumpHeight = 32;
+let position = dinosaurId;
+
+function dinosaurDirectionMove(event) {
+    if (event.keyCode == 32) {
+        if (gameOver) {
+            setTimer = setInterval(changeTime, 1000);
+            setFenceMove = setInterval(moveFence, 1000);
+            setTreePosition = setInterval(createTreePosition, 4000);
+            setChangeTreePosition = setInterval(changeTreePosition, 500);
+            gameOver = false;
+        }
+    }
+    if (event.keyCode == 38) {
+        let jumpInterval = setInterval(function () {
+            document.getElementById(position).className = 'box';
+            position -= noMoves;
+            document.getElementById(position).className = 'dinosaur';
+            if(position == jumpHeight) {
+                clearInterval(jumpInterval);
+                let downInterval = setInterval(function() {
+                    document.getElementById(position).className = 'box';
+                    position += noMoves;
+                    document.getElementById(position).className = 'dinosaur';
+                    if(position == 62) {
+                        clearInterval(downInterval);
+                        jumping = false;
+                    }
+                }, 300);
+            }
+        }, 300);
+    }
+}
+
+function moveFence() {
+    for(let i = 0; i < fenceId.length; ++i) {
+        if (document.getElementById(fenceId[i]).className == 'fence1') {
+            document.getElementById(fenceId[i]).className = 'fence2';
+        } else {
+            document.getElementById(fenceId[i]).className = 'fence1';
+        }
+    }
+}
+ 
+let time = 0;
+
+function changeTime() {
+    ++time;
+    timer.innerHTML = time;
+}
