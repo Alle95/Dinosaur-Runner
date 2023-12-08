@@ -1,13 +1,13 @@
 let noRow = 5;
 let noColumns = 15;
 let board, dinosaurId = 62, sunId = 1, id = 0;
-let cloudId = ["4","8","12"];
-let fence1Id = ["16","18","20","22","24","26","28","30"];
-let fence2Id = ["17","19","21","23","25","27","29"];
-let fenceId = ["16","18","20","22","24","26","28","30",
-"17","19","21","23","25","27","29"];
+let cloudId = ["4", "8", "12"];
+let fence1Id = ["16", "18", "20", "22", "24", "26", "28", "30"];
+let fence2Id = ["17", "19", "21", "23", "25", "27", "29"];
+let fenceId = ["16", "18", "20", "22", "24", "26", "28", "30",
+"17", "19", "21", "23", "25", "27", "29"];
 let setChangeTreePosition, setTreePosition, setFenceMove, setTimer;
-let gameOver = true, jumping = false;
+let gameOver = true;
 
 function createBoard() {
     board = [];
@@ -36,22 +36,6 @@ function createBoard() {
     }
     document.addEventListener("keyup", dinosaurDirectionMove);
 }
-
-/*const keyPress = document.addEventListener("keyup", (event) => {
-    if (event.key == ' ') {
-        if (gameOver) {
-            setTimer = setInterval(changeTime, 1000);
-            setFenceMove = setInterval(moveFence, 1000);
-            setTreePosition = setInterval(createTreePosition, 4000);
-            setChangeTreePosition = setInterval(changeTreePosition, 500);
-            gameOver = false;
-        }
-       if (!jumping) {
-        jumping = true;
-        dinosaurDirectionMove();
-       }
-    }
-});*/
 
 let treeCell;
 let treeList = [];
@@ -116,7 +100,6 @@ function dinosaurDirectionMove(event) {
                     document.getElementById(position).className = 'dinosaur';
                     if(position == 62) {
                         clearInterval(downInterval);
-                        jumping = false;
                     }
                 }, 300);
             }
