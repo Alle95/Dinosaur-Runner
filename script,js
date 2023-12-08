@@ -7,7 +7,7 @@ let fence2Id = ["17", "19", "21", "23", "25", "27", "29"];
 let fenceId = ["16", "18", "20", "22", "24", "26", "28", "30",
 "17", "19", "21", "23", "25", "27", "29"];
 let setChangeTreePosition, setTreePosition, setFenceMove, setTimer;
-let gameOver = true;
+let gameOn = true;
 
 function createBoard() {
     board = [];
@@ -62,7 +62,7 @@ function changeTreePosition() {
             document.getElementById(newTreePosition.toString()).className = 'tree';
             treeList[i] = newTreePosition.toString();
         }
-        if(newTreePosition == position) {
+        if(newTreePosition == positionDinosaur) {
             scoreText.innerHTML = 'Your score is ' + time + ' points!';
             document.getElementById("reload").style.display = "block";
             clearInterval(setChangeTreePosition);
@@ -75,35 +75,35 @@ function changeTreePosition() {
 
 let noMoves = 15;
 let jumpHeight = 32;
-let position = dinosaurId;
+let positionDinosaur = dinosaurId;
 
 function dinosaurDirectionMove(event) {
     if (event.keyCode == 32) {
-        if (gameOver) {
+        if (gameOn) {
             setTimer = setInterval(changeTime, 1000);
             setFenceMove = setInterval(moveFence, 1000);
-            setTreePosition = setInterval(createTreePosition, 4000);
+            setTreePosition = setInterval(createTreePosition, 3000);
             setChangeTreePosition = setInterval(changeTreePosition, 500);
-            gameOver = false;
+            gameOn = false;
         }
     }
     if (event.keyCode == 38) {
         let jumpInterval = setInterval(function () {
-            document.getElementById(position).className = 'box';
-            position -= noMoves;
-            document.getElementById(position).className = 'dinosaur';
-            if(position == jumpHeight) {
+            document.getElementById(positionDinosaur).className = 'box';
+            positionDinosaur -= noMoves;
+            document.getElementById(positionDinosaur).className = 'dinosaur';
+            if(positionDinosaur == jumpHeight) {
                 clearInterval(jumpInterval);
                 let downInterval = setInterval(function() {
-                    document.getElementById(position).className = 'box';
-                    position += noMoves;
-                    document.getElementById(position).className = 'dinosaur';
-                    if(position == 62) {
+                    document.getElementById(positionDinosaur).className = 'box';
+                    positionDinosaur += noMoves;
+                    document.getElementById(positionDinosaur).className = 'dinosaur';
+                    if(positionDinosaur == 62) {
                         clearInterval(downInterval);
                     }
-                }, 300);
+                }, 500);
             }
-        }, 300);
+        }, 500);
     }
 }
 
